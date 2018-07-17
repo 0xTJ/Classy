@@ -5,25 +5,24 @@
 
 enum ClassType { LECTURE, TUTORIAL, LAB, STUDIO, OTHER };
 enum Weekday { SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY };
-const char const * const classtypes[] = { "lecture", "tutorial", "laboratory", "studio", "other" };
-const char const * const weekdays[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+const char * const classtypes[] = { "lecture", "tutorial", "laboratory", "studio", "other" };
+const char * const weekdays[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 
-union CourseCode {
-    struct {
-        char subject[8];
-        char number[8];
-    };
-    unsigned long ident;
+struct CourseCode {
+    char subject[8];
+    char number[8];
 };
-    
+
 struct Course {
-    union CourseCode code;
-    char name[64];
+    struct CourseCode code;
+    char name[32];
 };
 
 struct Class {
-    union CourseCode code;
-    struct tm start_time;
+    struct CourseCode code;
+    int start_slot;
+    int length_slots;
+    enum Weekday wday;
     enum ClassType type;
 };
 
