@@ -5,9 +5,9 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-int start_slot = 17;
-int end_slot = 35;
-                       
+int start_slot = 48;
+int end_slot = -1;
+
 int first[7][48] = {0};
 int second[7][48] = {0};
 int more_than_two[7][48] = {0};
@@ -48,7 +48,7 @@ struct Class classes[128] = {
             .number = "353"
         },
         .start_slot = 19,
-        .length_slots = 2,
+        .length_slots = 3,
         .wday = MONDAY,
         .type = LECTURE
     }
@@ -63,6 +63,11 @@ void loadTimetables(void) {
                 second[classes[i].wday][classes[i].start_slot + j] = i;
             else
                 ++more_than_two[classes[i].wday][classes[i].start_slot + j];
+
+            if (classes[i].start_slot < start_slot)
+                start_slot = classes[i].start_slot;
+            if (classes[i].start_slot + classes[i].length_slots > end_slot)
+                end_slot = classes[i].start_slot + classes[i].length_slots;
         }
     }
 };
@@ -85,7 +90,7 @@ int main (int argc, char **argv) {
     int class_col_width_half0 = (class_col_width - 1) / 2;
     int class_col_width_half1 = class_col_width - 1 - class_col_width_half0;
     int time_col_width = w.ws_col - 5 * class_col_width - 7;
-    
+
     putchar('|');
     for (int i = 0; i < time_col_width; ++i)
         putchar('-');
@@ -97,7 +102,7 @@ int main (int argc, char **argv) {
         putchar('|');
     }
     putchar('\n');
-    
+
     putchar('|');
     for (int i = 0; i < time_col_width; ++i)
         putchar(' ');
@@ -108,7 +113,7 @@ int main (int argc, char **argv) {
     }
     putchar('\n');
 
-    for (int slot = 17; slot < 35; ++slot) {
+    for (int slot = start_slot; slot < end_slot; ++slot) {
         putchar('|');
         for (int i = 0; i < time_col_width; ++i) {
             putchar('-');
@@ -225,7 +230,7 @@ int main (int argc, char **argv) {
         putchar('|');
         putchar('\n');
     }
-    
+
     putchar('|');
     for (int i = 0; i < time_col_width; ++i)
         putchar('-');
