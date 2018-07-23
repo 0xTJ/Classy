@@ -24,6 +24,7 @@ struct Class {
     int length_slots;
     enum Weekday wday;
     enum ClassType type;
+    char location[32];
 };
 
 #endif // ifndef _COURSE_H
